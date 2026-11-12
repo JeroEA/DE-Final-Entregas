@@ -1,0 +1,245 @@
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_athena_workgroup.entregas will be created
+  + resource "aws_athena_workgroup" "entregas" {
+      + arn           = (known after apply)
+      + description   = "Workgroup del examen final de entregas"
+      + force_destroy = true
+      + id            = (known after apply)
+      + name          = "entregas_wg"
+      + state         = "ENABLED"
+      + tags_all      = {
+          + "Gestion"  = "Terraform"
+          + "Proyecto" = "DE-Final-Entregas"
+        }
+
+      + configuration {
+          + enforce_workgroup_configuration    = true
+          + publish_cloudwatch_metrics_enabled = false
+          + requester_pays_enabled             = false
+
+          + engine_version {
+              + effective_engine_version = (known after apply)
+              + selected_engine_version  = "Athena engine version 3"
+            }
+
+          + result_configuration {
+              + output_location = "s3://de-final-entregas-jeroespinal-2026/resultados-athena/"
+
+              + encryption_configuration {
+                  + encryption_option = "SSE_S3"
+                }
+            }
+        }
+    }
+
+  # aws_glue_catalog_database.entregas will be created
+  + resource "aws_glue_catalog_database" "entregas" {
+      + arn          = (known after apply)
+      + catalog_id   = (known after apply)
+      + description  = "Catalogo de los intentos de entrega de paquetes (examen final)"
+      + id           = (known after apply)
+      + location_uri = (known after apply)
+      + name         = "entregas_db"
+      + tags_all     = {
+          + "Gestion"  = "Terraform"
+          + "Proyecto" = "DE-Final-Entregas"
+        }
+
+      + create_table_default_permission (known after apply)
+    }
+
+  # aws_glue_catalog_table.entregas will be created
+  + resource "aws_glue_catalog_table" "entregas" {
+      + arn           = (known after apply)
+      + catalog_id    = (known after apply)
+      + database_name = "entregas_db"
+      + description   = "Intentos de entrega. Particion fecha=yyyy-MM-dd resuelta por partition projection"
+      + id            = (known after apply)
+      + name          = "entregas"
+      + parameters    = {
+          + "EXTERNAL"                       = "TRUE"
+          + "classification"                 = "csv"
+          + "projection.enabled"             = "true"
+          + "projection.fecha.format"        = "yyyy-MM-dd"
+          + "projection.fecha.interval"      = "1"
+          + "projection.fecha.interval.unit" = "DAYS"
+          + "projection.fecha.range"         = "2026-10-01,2026-10-03"
+          + "projection.fecha.type"          = "date"
+          + "skip.header.line.count"         = "1"
+          + "storage.location.template"      = "s3://de-final-entregas-jeroespinal-2026/entregas/fecha=${fecha}/"
+        }
+      + table_type    = "EXTERNAL_TABLE"
+
+      + partition_index (known after apply)
+
+      + partition_keys {
+          + comment = "Fecha del archivo diario (yyyy-MM-dd), tomada de la ruta"
+          + name    = "fecha"
+          + type    = "string"
+        }
+
+      + storage_descriptor {
+          + input_format  = "org.apache.hadoop.mapred.TextInputFormat"
+          + location      = "s3://de-final-entregas-jeroespinal-2026/entregas/"
+          + output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+
+          + columns {
+              + comment = "Identificador unico del envio"
+              + name    = "id_envio"
+              + type    = "string"
+            }
+          + columns {
+              + comment = "Ciudad del intento de entrega"
+              + name    = "ciudad"
+              + type    = "string"
+            }
+          + columns {
+              + comment = "Transportadora responsable"
+              + name    = "transportadora"
+              + type    = "string"
+            }
+          + columns {
+              + comment = "entregado | destinatario_ausente | direccion_incorrecta"
+              + name    = "estado"
+              + type    = "string"
+            }
+          + columns {
+              + comment = "Minutos; 0 en intentos fallidos"
+              + name    = "duracion_minutos"
+              + type    = "int"
+            }
+
+          + ser_de_info {
+              + name                  = "csv-coma"
+              + parameters            = {
+                  + "field.delim"          = ","
+                  + "serialization.format" = ","
+                }
+              + serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+            }
+        }
+    }
+
+  # aws_s3_bucket.datos will be created
+  + resource "aws_s3_bucket" "datos" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = "de-final-entregas-jeroespinal-2026"
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = true
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = (known after apply)
+      + request_payer               = (known after apply)
+      + tags_all                    = {
+          + "Gestion"  = "Terraform"
+          + "Proyecto" = "DE-Final-Entregas"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket_ownership_controls.datos will be created
+  + resource "aws_s3_bucket_ownership_controls" "datos" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + rule {
+          + object_ownership = "BucketOwnerEnforced"
+        }
+    }
+
+  # aws_s3_bucket_public_access_block.datos will be created
+  + resource "aws_s3_bucket_public_access_block" "datos" {
+      + block_public_acls       = true
+      + block_public_policy     = true
+      + bucket                  = (known after apply)
+      + id                      = (known after apply)
+      + ignore_public_acls      = true
+      + restrict_public_buckets = true
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.datos will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "datos" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + rule {
+          + apply_server_side_encryption_by_default {
+              + sse_algorithm     = "AES256"
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+Plan: 7 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + base_datos                  = "entregas_db"
+  + bucket                      = "de-final-entregas-jeroespinal-2026"
+  + bucket_arn                  = (known after apply)
+  + rango_proyeccion            = "2026-10-01,2026-10-03"
+  + region                      = "us-east-2"
+  + tabla                       = "entregas"
+  + tabla_arn                   = (known after apply)
+  + ubicacion_entregas          = "s3://de-final-entregas-jeroespinal-2026/entregas/"
+  + ubicacion_resultados_athena = "s3://de-final-entregas-jeroespinal-2026/resultados-athena/"
+  + workgroup                   = "entregas_wg"
+aws_glue_catalog_database.entregas: Creating...
+aws_s3_bucket.datos: Creating...
+aws_glue_catalog_database.entregas: Creation complete after 2s [id=143977713784:entregas_db]
+aws_s3_bucket.datos: Creation complete after 5s [id=de-final-entregas-jeroespinal-2026]
+aws_s3_bucket_ownership_controls.datos: Creating...
+aws_s3_bucket_public_access_block.datos: Creating...
+aws_s3_bucket_server_side_encryption_configuration.datos: Creating...
+aws_athena_workgroup.entregas: Creating...
+aws_glue_catalog_table.entregas: Creating...
+aws_s3_bucket_public_access_block.datos: Creation complete after 1s [id=de-final-entregas-jeroespinal-2026]
+aws_glue_catalog_table.entregas: Creation complete after 1s [id=143977713784:entregas_db:entregas]
+aws_s3_bucket_ownership_controls.datos: Creation complete after 1s [id=de-final-entregas-jeroespinal-2026]
+aws_s3_bucket_server_side_encryption_configuration.datos: Creation complete after 2s [id=de-final-entregas-jeroespinal-2026]
+aws_athena_workgroup.entregas: Creation complete after 2s [id=entregas_wg]
+
+Apply complete! Resources: 7 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+base_datos = "entregas_db"
+bucket = "de-final-entregas-jeroespinal-2026"
+bucket_arn = "arn:aws:s3:::de-final-entregas-jeroespinal-2026"
+rango_proyeccion = "2026-10-01,2026-10-03"
+region = "us-east-2"
+tabla = "entregas"
+tabla_arn = "arn:aws:glue:us-east-2:143977713784:table/entregas_db/entregas"
+ubicacion_entregas = "s3://de-final-entregas-jeroespinal-2026/entregas/"
+ubicacion_resultados_athena = "s3://de-final-entregas-jeroespinal-2026/resultados-athena/"
+workgroup = "entregas_wg"

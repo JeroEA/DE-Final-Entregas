@@ -1,0 +1,52 @@
+{
+  "base_datos": {
+    "sensitive": false,
+    "type": "string",
+    "value": "entregas_db"
+  },
+  "bucket": {
+    "sensitive": false,
+    "type": "string",
+    "value": "de-final-entregas-jeroespinal-2026"
+  },
+  "bucket_arn": {
+    "sensitive": false,
+    "type": "string",
+    "value": "arn:aws:s3:::de-final-entregas-jeroespinal-2026"
+  },
+  "rango_proyeccion": {
+    "sensitive": false,
+    "type": "string",
+    "value": "2026-10-01,2026-10-03"
+  },
+  "region": {
+    "sensitive": false,
+    "type": "string",
+    "value": "us-east-2"
+  },
+  "tabla": {
+    "sensitive": false,
+    "type": "string",
+    "value": "entregas"
+  },
+  "tabla_arn": {
+    "sensitive": false,
+    "type": "string",
+    "value": "arn:aws:glue:us-east-2:143977713784:table/entregas_db/entregas"
+  },
+  "ubicacion_entregas": {
+    "sensitive": false,
+    "type": "string",
+    "value": "s3://de-final-entregas-jeroespinal-2026/entregas/"
+  },
+  "ubicacion_resultados_athena": {
+    "sensitive": false,
+    "type": "string",
+    "value": "s3://de-final-entregas-jeroespinal-2026/resultados-athena/"
+  },
+  "workgroup": {
+    "sensitive": false,
+    "type": "string",
+    "value": "entregas_wg"
+  }
+}
