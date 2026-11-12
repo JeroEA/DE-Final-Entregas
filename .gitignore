@@ -1,0 +1,30 @@
+# Terraform: carpeta local, estado y planes
+.terraform/
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+crash.log
+crash.*.log
+.terraform.tfstate.lock.info
+
+# Variables locales que pueden contener datos sensibles
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Credenciales
+.aws/
+credentials
+.env
+*.pem
+*.key
+
+# Sistema / Python
+.DS_Store
+__pycache__/
+*.pyc
