@@ -36,7 +36,7 @@ flowchart LR
 
 | Variable | Valor por defecto | Descripción |
 | --- | --- | --- |
-| `region` | `us-east-1` | Región de todos los recursos. |
+| `region` | `us-east-2` | Región de todos los recursos. |
 | `nombre_bucket` | `de-final-entregas-jeroespinal-2026` | Nombre único global del bucket. Cámbielo si ya existe. |
 | `nombre_base_datos` | `entregas_db` | Base de datos de Glue. |
 | `nombre_tabla` | `entregas` | Tabla externa. |
